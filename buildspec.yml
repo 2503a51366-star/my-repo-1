@@ -1,0 +1,20 @@
+
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - python -m pip install --upgrade pip
+  pre_build:
+    commands:
+      - pip install -r requirements.txt
+  build:
+    commands:
+      - python -m py_compile app.py
+      - echo "DevOps Pulse build checks passed"
+
+artifacts:
+  files:
+    - '**/*'
