@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1220">
+  <title>DevOps Pulse | Pipeline Monitor</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <a class="brand" href="#">
+        <span class="brand-icon">⌁</span>
+        <span>DevOps<span class="brand-accent">Pulse</span>
+          <small>PIPELINE OBSERVABILITY</small>
+        </span>
+      </a>
+
+      <div class="side-label">WORKSPACE</div>
+      <a class="nav-item active" href="#overview">▦ <span>Overview</span></a>
+      <a class="nav-item" href="#history">≡ <span>Build history</span></a>
+      <a class="nav-item" href="#device">◉ <span>IoT device</span></a>
+      <a class="nav-item" href="#architecture">⌘ <span>Architecture</span></a>
+
+      <div class="sidebar-bottom">
+        <div class="cloud-card">
+          <span class="cloud-icon">☁</span>
+          <strong>Cloud connection</strong>
+          <p id="cloudLabel">Demo environment</p>
+          <span class="status-dot"></span>
+          <span class="tiny-text" id="connectionText">Local simulation active</span>
+        </div>
+        <p class="sidebar-foot">CLOUD COMPUTING LAB<br>DEVOPS INDICATOR · V1.0</p>
+      </div>
+    </aside>
+
+    <main class="main" id="overview">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">CLOUD COMPUTING / PROJECT CONSOLE</p>
+          <h1>Pipeline overview</h1>
+          <p class="muted">Monitor your CI/CD execution and physical status indicator.</p>
+        </div>
+        <div class="top-actions">
+          <span class="mode-pill" id="modePill">● DEMO MODE</span>
+          <button class="button secondary" id="refreshBtn">↻ Refresh</button>
+        </div>
+      </header>
+
+      <section class="welcome-panel">
+        <div class="welcome-copy">
+          <span class="eyebrow light">DEVOPS PIPELINE SUCCESS INDICATOR</span>
+          <h2>Your builds.<br><span>One clear signal.</span></h2>
+          <p>Track pipeline outcomes in the cloud and send a matching signal to your ESP32 RGB LED.</p>
+          <div class="welcome-meta">
+            <span>◈ <b id="pipelineNameHero">DevOpsPipeline</b></span>
+            <span>↗ <b id="lastUpdatedHero">Waiting for update</b></span>
+          </div>
+        </div>
+        <div class="signal-visual">
+          <div class="signal-ring">
+            <div class="signal-light" id="heroLight"></div>
+          </div>
+          <span class="signal-caption" id="heroStatus">READY TO MONITOR</span>
+          <span class="signal-subcaption">PHYSICAL STATUS SIGNAL</span>
+        </div>
+      </section>
+
+      <section class="metric-grid">
+        <article class="metric-card">
+          <div class="metric-top"><span>Latest execution</span><span class="metric-icon blue">⌁</span></div>
+          <h3 id="latestStatus">PASSED</h3>
+          <p id="latestExecution">Build #1042</p>
+          <span class="metric-note" id="latestNote">Latest recorded result</span>
+        </article>
+        <article class="metric-card">
+          <div class="metric-top"><span>Success rate</span><span class="metric-icon green">↗</span></div>
+          <h3 id="successRate">92.5%</h3>
+          <p>Based on recorded builds</p>
+          <span class="metric-note">Successful ÷ completed builds</span>
+        </article>
+        <article class="metric-card">
+          <div class="metric-top"><span>Failed builds</span><span class="metric-icon red">!</span></div>
+          <h3 id="failedCount">3</h3>
+          <p>Recorded failed executions</p>
+          <span class="metric-note">Review history below</span>
+        </article>
+        <article class="metric-card">
+          <div class="metric-top"><span>Device status</span><span class="metric-icon purple">◉</span></div>
+          <h3 id="deviceStatus">DEMO</h3>
+          <p id="deviceDescription">ESP32 connection not verified</p>
+          <span class="metric-note" id="ledLabel">Expected LED: GREEN</span>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel chart-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">EXECUTION ANALYTICS</p>
+              <h2>Pipeline activity</h2>
+            </div>
+            <select id="chartRange" aria-label="Chart range">
+              <option value="7">Last 7 builds</option>
+              <option value="14">Last 14 builds</option>
+              <option value="30">Last 30 builds</option>
+            </select>
+          </div>
+          <div class="chart-legend">
+            <span><i class="legend-dot success-bg"></i> Successful</span>
+            <span><i class="legend-dot failure-bg"></i> Failed</span>
+            <span class="muted">Duration in seconds</span>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="activityChart" aria-label="Build duration chart"></canvas>
+          </div>
+          <div class="chart-footer">
+            <span id="chartSummary">Build duration history</span>
+            <span class="muted">Latest executions first in history</span>
+          </div>
+        </article>
+
+        <article class="panel device-panel" id="device">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">HARDWARE CONNECTIVITY</p>
+              <h2>IoT indicator</h2>
+            </div>
+            <span class="status-badge" id="deviceBadge">DEMO</span>
+          </div>
+
+          <div class="device-stage">
+            <div class="device-illustration">
+              <div class="device-chip">ESP32</div>
+              <div class="device-pins"></div>
+              <div class="device-led" id="deviceLed"></div>
+            </div>
+            <div class="device-reading">
+              <span class="muted">Current signal</span>
+              <h3 id="ledColorText">GREEN</h3>
+              <p id="deviceMessage">Preview signal — hardware not verified</p>
+            </div>
+          </div>
+
+          <div class="device-row">
+            <span>MQTT topic</span>
+            <code>devops/pipeline/status</code>
+          </div>
+          <div class="device-row">
+            <span>Last reported status</span>
+            <strong id="deviceLastSeen">Demo data</strong>
+          </div>
+          <div class="device-row">
+            <span>Connection</span>
+            <strong id="deviceConnection">Simulation only</strong>
+          </div>
+          <p class="device-foot">The LED shown here is a visual preview. Real connectivity is confirmed only by device/backend telemetry.</p>
+        </article>
+      </section>
+
+      <section class="panel history-panel" id="history">
+        <div class="panel-heading history-heading">
+          <div>
+            <p class="eyebrow">EXECUTION LOG</p>
+            <h2>Build history</h2>
+            <p class="muted small">Inspect outcomes, execution IDs and durations.</p>
+          </div>
+          <div class="history-actions">
+            <input type="search" id="searchInput" placeholder="Search build ID or status..." aria-label="Search build history">
+            <select id="statusFilter" aria-label="Filter by status">
+              <option value="ALL">All statuses</option>
+              <option value="SUCCEEDED">Succeeded</option>
+              <option value="FAILED">Failed</option>
+              <option value="IN_PROGRESS">In progress</option>
+            </select>
+            <button class="button secondary" id="exportBtn">↓ Export CSV</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>EXECUTION</th>
+                <th>PIPELINE</th>
+                <th>STATUS</th>
+                <th>DURATION</th>
+                <th>LED SIGNAL</th>
+                <th>TIME</th>
+              </tr>
+            </thead>
+            <tbody id="historyBody"></tbody>
+          </table>
+        </div>
+        <div class="table-footer">
+          <span id="tableCount">0 executions</span>
+          <span class="muted">Demo records are illustrative, not actual AWS executions.</span>
+        </div>
+      </section>
+
+      <section class="panel controls-panel">
+        <div>
+          <p class="eyebrow">DEMONSTRATION TOOLS</p>
+          <h2>Test the indicator</h2>
+          <p class="muted small">Generate simulated events to demonstrate dashboard behaviour before AWS is connected.</p>
+        </div>
+        <div class="demo-actions">
+          <button class="button success-button" id="successBtn">✓ Simulate success</button>
+          <button class="button danger-button" id="failureBtn">✕ Simulate failure</button>
+          <button class="button secondary" id="runningBtn">◷ Simulate running</button>
+          <button class="button secondary" id="resetBtn">Reset demo</button>
+        </div>
+        <p class="notice" id="actionMessage" role="status">Demo ready. Simulated events do not run a real AWS build.</p>
+      </section>
+
+      <section class="panel architecture-panel" id="architecture">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">SYSTEM DESIGN</p>
+            <h2>Cloud-to-hardware workflow</h2>
+          </div>
+        </div>
+        <div class="architecture-flow">
+          <div class="arch-node"><span>01</span><strong>CodePipeline</strong><small>Build outcome</small></div>
+          <b class="arch-arrow">→</b>
+          <div class="arch-node"><span>02</span><strong>EventBridge</strong><small>State event</small></div>
+          <b class="arch-arrow">→</b>
+          <div class="arch-node"><span>03</span><strong>Lambda</strong><small>Process status</small></div>
+          <b class="arch-arrow">→</b>
+          <div class="arch-node"><span>04</span><strong>IoT Core</strong><small>MQTT publish</small></div>
+          <b class="arch-arrow">→</b>
+          <div class="arch-node"><span>05</span><strong>ESP32 + LED</strong><small>Physical signal</small></div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span>DEVOPS PULSE · CLOUD COMPUTING LAB PROJECT</span>
+        <span>HTML · CSS · JavaScript · AWS · ESP32</span>
+      </footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
